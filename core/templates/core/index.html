@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billetera UCA</title>
+    <style>
+        :root {
+            --bg: #101214;
+            --panel: #171b1f;
+            --panel-soft: #20262c;
+            --line: #343b43;
+            --text: #f6f8fb;
+            --muted: #9aa7b4;
+            --orange: #ff7a1a;
+            --teal: #27d3bd;
+            --blue: #6da8ff;
+            --danger: #ff6b6b;
+            --success: #7bd88f;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text);
+            font-family: Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(39, 211, 189, 0.18), transparent 34%),
+                linear-gradient(135deg, #0d0f11 0%, #15191d 55%, #111316 100%);
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(15, 17, 19, 0.86);
+            backdrop-filter: blur(10px);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tab {
+            width: 86px;
+            height: 32px;
+            border: 1px solid #66717d;
+            border-radius: 7px;
+            background: #101214;
+        }
+
+        .brand {
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+
+        .page {
+            width: min(1120px, calc(100% - 32px));
+            margin: 38px auto;
+        }
+
+        .wallet-grid {
+            display: grid;
+            grid-template-columns: 260px minmax(280px, 1fr) 300px;
+            gap: 22px;
+            align-items: stretch;
+        }
+
+        .panel,
+        .card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(23, 27, 31, 0.92);
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.24);
+        }
+
+        .panel {
+            padding: 22px;
+        }
+
+        .profile {
+            display: grid;
+            justify-items: center;
+            text-align: center;
+        }
+
+        .avatar {
+            display: grid;
+            place-items: center;
+            width: 92px;
+            height: 92px;
+            margin: 6px 0 14px;
+            border-radius: 50%;
+            color: #111316;
+            font-size: 38px;
+            font-weight: 900;
+            background: linear-gradient(145deg, var(--orange), #ff9f45);
+            box-shadow: 0 0 0 8px rgba(255, 122, 26, 0.1);
+        }
+
+        .label {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .username {
+            width: 100%;
+            margin-top: 8px;
+            padding: 10px 12px;
+            border: 1px solid #5a6470;
+            border-radius: 6px;
+            font-weight: 700;
+            background: #111417;
+        }
+
+        .link-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 36px;
+            padding: 0 14px;
+            border: 1px solid #65717d;
+            border-radius: 6px;
+            color: var(--text);
+            text-decoration: none;
+            background: #15191d;
+        }
+
+        .wallet-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 220px;
+            padding: 28px;
+            background:
+                linear-gradient(135deg, rgba(39, 211, 189, 0.2), transparent 40%),
+                linear-gradient(145deg, #1d2329, #111417);
+        }
+
+        .wallet-card::after {
+            content: "";
+            position: absolute;
+            right: -44px;
+            bottom: -54px;
+            width: 180px;
+            height: 180px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 50%;
+        }
+
+        .wallet-title {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .wallet-subtitle {
+            margin: 8px 0 30px;
+            color: var(--muted);
+        }
+
+        .balance {
+            margin: 0;
+            font-size: 42px;
+            font-weight: 900;
+        }
+
+        .balance-note {
+            color: var(--teal);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .actions {
+            display: grid;
+            gap: 16px;
+        }
+
+        .action-form {
+            display: grid;
+            gap: 10px;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--panel-soft);
+        }
+
+        .action-form h2 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .action-form input {
+            width: 100%;
+            min-height: 40px;
+            padding: 9px 11px;
+            border: 1px solid #55616d;
+            border-radius: 6px;
+            color: var(--text);
+            background: #111417;
+        }
+
+        .primary,
+        .secondary,
+        .logout {
+            min-height: 40px;
+            border: 0;
+            border-radius: 6px;
+            color: #101214;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .primary {
+            background: var(--teal);
+        }
+
+        .secondary {
+            background: var(--orange);
+        }
+
+        .logout {
+            padding: 0 14px;
+            color: var(--text);
+            background: #2a3036;
+        }
+
+        .messages {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .message {
+            padding: 12px 14px;
+            border-radius: 7px;
+            color: #101214;
+            font-weight: 700;
+            background: var(--success);
+        }
+
+        .message.error {
+            background: var(--danger);
+        }
+
+        .history {
+            margin-top: 22px;
+            padding: 20px;
+        }
+
+        .history h2 {
+            margin: 0 0 14px;
+            font-size: 18px;
+        }
+
+        .movement {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            padding: 12px 0;
+            border-top: 1px solid var(--line);
+        }
+
+        .movement:first-of-type {
+            border-top: 0;
+        }
+
+        .movement small {
+            color: var(--muted);
+        }
+
+        .amount-deposito {
+            color: var(--teal);
+            font-weight: 900;
+        }
+
+        .amount-retiro {
+            color: var(--orange);
+            font-weight: 900;
+        }
+
+        .empty {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        @media (max-width: 900px) {
+            .wallet-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                padding: 12px 16px;
+            }
+
+            .tabs {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="tabs" aria-hidden="true">
+            <span class="tab"></span>
+            <span class="tab"></span>
+        </div>
+        <div class="brand">Billetera UCA</div>
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="logout" type="submit">Cerrar sesion</button>
+        </form>
+    </header>
+
+    <main class="page">
+        {% if messages %}
+            <section class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </section>
+        {% endif %}
+
+        <section class="wallet-grid">
+            <aside class="panel profile">
+                <div class="avatar">{{ request.user.username|first|upper }}</div>
+                <span class="label">Nombre de usuario</span>
+                <div class="username">{{ request.user.username }}</div>
+                <a class="link-button" href="{% url 'admin:index' %}">Editar usuario</a>
+            </aside>
+
+            <section class="card wallet-card">
+                <p class="label">Cuenta principal</p>
+                <h1 class="wallet-title">Billetera UCA</h1>
+                <p class="wallet-subtitle">ID {{ billetera.idBilletera }} · Estado {{ billetera.get_estado_display }}</p>
+                <p class="balance">${{ saldo|floatformat:2 }}</p>
+                <span class="balance-note">Saldo disponible</span>
+            </section>
+
+            <aside class="panel actions">
+                <form class="action-form" method="POST">
+                    {% csrf_token %}
+                    <h2>Depositar</h2>
+                    {{ form.monto }}
+                    <button class="primary" type="submit" name="tipo" value="deposito">+ Depositar</button>
+                </form>
+
+                <form class="action-form" method="POST">
+                    {% csrf_token %}
+                    <h2>Retirar</h2>
+                    {{ form.monto }}
+                    <button class="secondary" type="submit" name="tipo" value="retiro">- Retirar</button>
+                </form>
+            </aside>
+        </section>
+
+        <section class="panel history">
+            <h2>Ultimos movimientos</h2>
+            {% for movimiento in movimientos %}
+                <div class="movement">
+                    <div>
+                        <strong>{{ movimiento.get_tipo_display }}</strong><br>
+                        <small>{{ movimiento.fecha|date:"d/m/Y H:i" }}</small>
+                    </div>
+                    <span class="amount-{{ movimiento.tipo }}">
+                        {% if movimiento.tipo == 'deposito' %}+{% else %}-{% endif %}${{ movimiento.monto|floatformat:2 }}
+                    </span>
+                </div>
+            {% empty %}
+                <p class="empty">Todavia no hay movimientos en tu billetera.</p>
+            {% endfor %}
+        </section>
+    </main>
+</body>
+</html>
