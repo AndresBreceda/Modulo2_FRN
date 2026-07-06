@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 
 from .forms import MovimientoForm
-from .models import Billetera, Movimiento, Usuario
+from .models import Billetera, Movimiento
 
 
 def login_view(request):
@@ -22,15 +22,7 @@ def login_view(request):
 
 @login_required(login_url='login')
 def index(request):
-    usuario, _ = Usuario.objects.get_or_create(
-        auth_user=request.user,
-        defaults={
-            'nombre': request.user.first_name or request.user.username,
-            'apellido': request.user.last_name,
-            'correo': request.user.email,
-        },
-    )
-    billetera, _ = Billetera.objects.get_or_create(usuario=usuario)
+    billetera, _ = Billetera.objects.get_or_create(usuario=request.user)
     movimientos = Movimiento.objects.filter(billetera=billetera)
     saldo = billetera.consultarSaldo()
 
@@ -56,6 +48,15 @@ def index(request):
         'form': form,
         'saldo': saldo,
         'billetera': billetera,
-        'usuario_billetera': usuario,
         'movimientos': movimientos[:5],
     })
+
+
+@login_required(login_url='login')
+def eliminar_billetera(request):
+    if request.method == 'POST':
+        Billetera.objects.filter(usuario=request.user).delete()
+        Billetera.objects.create(usuario=request.user)
+        messages.success(request, 'Billetera eliminada. Se creo una billetera nueva para continuar las pruebas.')
+
+    return redirect('index')
