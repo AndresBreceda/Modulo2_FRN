@@ -1,0 +1,23 @@
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name='Nota',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('texto', models.CharField(max_length=200)),
+                ('creado_en', models.DateTimeField(auto_now_add=True)),
+            ],
+            options={
+                'ordering': ['-creado_en'],
+            },
+        ),
+    ]
