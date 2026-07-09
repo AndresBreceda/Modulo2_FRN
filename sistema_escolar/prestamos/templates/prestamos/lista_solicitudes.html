@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Solicitudes de préstamo{% endblock %}
+
+{% block content %}
+
+<h2>Solicitudes de préstamo</h2>
+
+{% if user.is_superuser or user.is_staff %}
+    <div class="action-row">
+        <a href="{% url 'registrar_prestamo' %}">
+            Registrar préstamo directo
+        </a>
+
+        <a href="{% url 'prestamos_activos' %}">
+            Ver préstamos activos
+        </a>
+    </div>
+
+{% elif user.is_authenticated and user.perfilusuario.rol == 'ADMIN' %}
+    <div class="action-row">
+        <a href="{% url 'registrar_prestamo' %}">
+            Registrar préstamo directo
+        </a>
+
+        <a href="{% url 'prestamos_activos' %}">
+            Ver préstamos activos
+        </a>
+    </div>
+{% endif %}
+
+{% if solicitudes %}
+    <table>
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Libro</th>
+                <th>Estado</th>
+                <th>Fecha de solicitud</th>
+                <th>Observaciones</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for solicitud in solicitudes %}
+                <tr>
+                    <td data-label="Usuario">
+                        {{ solicitud.usuario.username }}
+                    </td>
+
+                    <td data-label="Libro">
+                        {{ solicitud.libro.titulo }}
+                    </td>
+
+                    <td data-label="Estado">
+                        <span class="badge
+                            {% if solicitud.estado == 'PENDIENTE' %}
+                                badge--pending
+                            {% elif solicitud.estado == 'APROBADA' %}
+                                badge--ok
+                            {% elif solicitud.estado == 'RECHAZADA' %}
+                                badge--danger
+                            {% else %}
+                                badge--off
+                            {% endif %}
+                        ">
+                            {{ solicitud.estado }}
+                        </span>
+                    </td>
+
+                    <td data-label="Fecha de solicitud">
+                        {{ solicitud.fecha_solicitud }}
+                    </td>
+
+                    <td data-label="Observaciones">
+                        {{ solicitud.observaciones|default:"Sin observaciones" }}
+                    </td>
+
+                    <td data-label="Acciones">
+                        {% if solicitud.estado == 'PENDIENTE' %}
+
+                            {% if user.is_superuser or user.is_staff %}
+                                <a href="{% url 'aprobar_solicitud' solicitud.id %}">
+                                    Aprobar
+                                </a>
+                                |
+                                <a href="{% url 'rechazar_solicitud' solicitud.id %}">
+                                    Rechazar
+                                </a>
+
+                            {% elif user.is_authenticated and user.perfilusuario.rol == 'ADMIN' %}
+                                <a href="{% url 'aprobar_solicitud' solicitud.id %}">
+                                    Aprobar
+                                </a>
+                                |
+                                <a href="{% url 'rechazar_solicitud' solicitud.id %}">
+                                    Rechazar
+                                </a>
+
+                            {% else %}
+                                Sin acciones
+                            {% endif %}
+
+                        {% else %}
+                            Sin acciones
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No hay solicitudes registradas.</p>
+{% endif %}
+
+{% endblock %}

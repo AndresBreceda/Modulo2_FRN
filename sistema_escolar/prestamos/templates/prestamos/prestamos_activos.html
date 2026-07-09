@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Préstamos activos{% endblock %}
+
+{% block content %}
+
+<h2>Préstamos activos</h2>
+
+{% if user.is_superuser or user.is_staff %}
+    <div class="action-row">
+        <a href="{% url 'registrar_prestamo' %}">
+            Registrar préstamo directo
+        </a>
+
+        <a href="{% url 'lista_solicitudes' %}">
+            Ver solicitudes
+        </a>
+    </div>
+
+{% elif user.is_authenticated and user.perfilusuario.rol == 'ADMIN' %}
+    <div class="action-row">
+        <a href="{% url 'registrar_prestamo' %}">
+            Registrar préstamo directo
+        </a>
+
+        <a href="{% url 'lista_solicitudes' %}">
+            Ver solicitudes
+        </a>
+    </div>
+{% endif %}
+
+{% if prestamos %}
+    <table>
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Libro</th>
+                <th>Ejemplar</th>
+                <th>Fecha préstamo</th>
+                <th>Fecha límite</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for prestamo in prestamos %}
+                <tr>
+                    <td data-label="Usuario">
+                        {{ prestamo.usuario.username }}
+                    </td>
+
+                    <td data-label="Libro">
+                        {{ prestamo.ejemplar.libro.titulo }}
+                    </td>
+
+                    <td data-label="Ejemplar">
+                        {{ prestamo.ejemplar.codigo_ejemplar }}
+                    </td>
+
+                    <td data-label="Fecha préstamo">
+                        {{ prestamo.fecha_prestamo }}
+                    </td>
+
+                    <td data-label="Fecha límite">
+                        {{ prestamo.fecha_limite }}
+                    </td>
+
+                    <td data-label="Estado">
+                        <span class="badge
+                            {% if prestamo.estado == 'ACTIVO' %}
+                                badge--pending
+                            {% elif prestamo.estado == 'DEVUELTO' %}
+                                badge--ok
+                            {% else %}
+                                badge--danger
+                            {% endif %}
+                        ">
+                            {{ prestamo.estado }}
+                        </span>
+                    </td>
+
+                    <td data-label="Acciones">
+                        {% if user.is_superuser or user.is_staff %}
+                            <a href="{% url 'registrar_devolucion' prestamo.id %}">
+                                Registrar devolución
+                            </a>
+
+                        {% elif user.is_authenticated and user.perfilusuario.rol == 'ADMIN' %}
+                            <a href="{% url 'registrar_devolucion' prestamo.id %}">
+                                Registrar devolución
+                            </a>
+
+                        {% else %}
+                            Sin acciones
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No hay préstamos activos.</p>
+{% endif %}
+
+{% endblock %}

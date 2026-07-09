@@ -18,4 +18,9 @@ urlpatterns = [
     path('horarios/', include('horarios.urls')),
     path('empresas/', include('empresas.urls')),
     path('billetera/', include('billetera.urls')),
+
+     # Biblioteca
+    path('usuarios/', include('usuarios.urls')),
+    path('libros/', include('libros.urls')),
+    path('prestamos/', include('prestamos.urls')),
 ]

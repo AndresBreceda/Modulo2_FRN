@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-
 @login_required
 def home(request):
     modulos = [
@@ -30,5 +29,11 @@ def home(request):
             'descripcion': 'Movimientos de ingresos y egresos con saldo acumulado.',
             'url': 'billetera_list',
         },
+        {
+            'nombre': 'Biblioteca',
+            'descripcion': 'Administración de libros, ejemplares, solicitudes y préstamos.',
+            'url': 'lista_libros',
+        },
     ]
+
     return render(request, 'home.html', {'modulos': modulos})

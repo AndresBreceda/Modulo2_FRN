@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+
+<h2>{{ titulo }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">Guardar</button>
+</form>
+
+<div class="back-link">
+    <a href="{% url 'lista_libros' %}">
+        Volver a la lista de libros
+    </a>
+</div>
+
+{% endblock %}

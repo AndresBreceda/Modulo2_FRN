@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de ejemplares{% endblock %}
+
+{% block content %}
+
+<h2>Lista de ejemplares</h2>
+
+{% if user.is_superuser or user.is_staff %}
+    <div class="action-row">
+        <a href="{% url 'crear_ejemplar' %}">Registrar nuevo ejemplar</a>
+    </div>
+{% elif user.is_authenticated and user.perfilusuario.rol == 'ADMIN' %}
+    <div class="action-row">
+        <a href="{% url 'crear_ejemplar' %}">Registrar nuevo ejemplar</a>
+    </div>
+{% endif %}
+
+{% if ejemplares %}
+    <table>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Libro</th>
+                <th>Estado</th>
+                <th>Ubicación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for ejemplar in ejemplares %}
+                <tr>
+                    <td data-label="Código">
+                        {{ ejemplar.codigo_ejemplar }}
+                    </td>
+
+                    <td data-label="Libro">
+                        {{ ejemplar.libro.titulo }}
+                    </td>
+
+                    <td data-label="Estado">
+                        <span class="badge
+                            {% if ejemplar.estado == 'DISPONIBLE' %}
+                                badge--ok
+                            {% elif ejemplar.estado == 'PRESTADO' %}
+                                badge--pending
+                            {% elif ejemplar.estado == 'DAÑADO' %}
+                                badge--danger
+                            {% else %}
+                                badge--off
+                            {% endif %}
+                        ">
+                            {{ ejemplar.estado }}
+                        </span>
+                    </td>
+
+                    <td data-label="Ubicación">
+                        {{ ejemplar.ubicacion }}
+                    </td>
+
+                    <td data-label="Acciones">
+                        {% if user.is_superuser or user.is_staff %}
+                            <a href="{% url 'editar_ejemplar' ejemplar.id %}">
+                                Editar
+                            </a>
+                            |
+                            <a href="{% url 'eliminar_ejemplar' ejemplar.id %}">
+                                Dar de baja
+                            </a>
+
+                        {% elif user.is_authenticated and user.perfilusuario.rol == 'ADMIN' %}
+                            <a href="{% url 'editar_ejemplar' ejemplar.id %}">
+                                Editar
+                            </a>
+                            |
+                            <a href="{% url 'eliminar_ejemplar' ejemplar.id %}">
+                                Dar de baja
+                            </a>
+
+                        {% else %}
+                            Sin acciones
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No hay ejemplares registrados.</p>
+{% endif %}
+
+{% endblock %}
