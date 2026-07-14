@@ -1,58 +1,178 @@
-{% extends 'alumnos_maestros/base.html' %}
+{% extends 'base.html' %}
 
-{% block title %}SCRUB - Materias{% endblock %}
-{% block page_title %}Materias{% endblock %}
+{% block title %}
+Materias
+{% endblock %}
+
+{% block page_title %}
+Administración de Materias
+{% endblock %}
 
 {% block content %}
-<section class="panel">
-    <div class="list-toolbar">
-        <form method="get" class="search-form">
-            <input type="search" name="q" value="{{ q }}" placeholder="Buscar por clave, nombre, carrera o maestro">
-            <button class="btn" type="submit">Buscar</button>
-        </form>
-        <a class="btn btn-primary" href="{% url 'materia_create' %}">Nueva materia</a>
-    </div>
-    <div class="table-wrap">
-        <table>
-            <thead>
+
+<div class="card">
+
+    <div class="card-body">
+
+        <div class="row mb-4">
+
+            <div class="col-md-8">
+
+                <form method="get">
+
+                    <div class="input-group">
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="q"
+                            value="{{ q }}"
+                            placeholder="Buscar materia...">
+
+                        <button class="btn btn-primary">
+
+                            <i class="bi bi-search"></i>
+
+                            Buscar
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="col-md-4 text-end">
+
+                <a href="{% url 'materia_create' %}" class="btn btn-success">
+
+                    <i class="bi bi-book-fill"></i>
+
+                    Nueva Materia
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <table class="table table-hover table-striped align-middle">
+
+            <thead class="table-primary">
+
                 <tr>
+
                     <th>Clave</th>
+
                     <th>Nombre</th>
+
                     <th>Carrera</th>
+
                     <th>Semestre</th>
-                    <th>Creditos</th>
-                    <th>Cupo</th>
-                    <th>Maestro</th>
-                    <th>Activa</th>
-                    <th>Acciones</th>
+
+                    <th>Créditos</th>
+
+                    <th>Profesor</th>
+
+                    <th>Estado</th>
+
+                    <th width="180">Acciones</th>
+
                 </tr>
+
             </thead>
+
             <tbody>
-                {% for materia in materias %}
+
+            {% for materia in materias %}
+
                 <tr>
+
                     <td>{{ materia.clave }}</td>
+
                     <td>{{ materia.nombre }}</td>
+
                     <td>{{ materia.carrera }}</td>
+
                     <td>{{ materia.semestre }}</td>
+
                     <td>{{ materia.creditos }}</td>
-                    <td>{{ materia.cupo_maximo }}</td>
-                    <td>{{ materia.maestro_responsable.nombre }} {{ materia.maestro_responsable.apellido_paterno }}</td>
-                    <td><span class="badge {% if materia.activa %}badge-ok{% else %}badge-muted{% endif %}">{% if materia.activa %}Si{% else %}No{% endif %}</span></td>
-                    <td class="actions">
-                        <a class="btn btn-small" href="{% url 'materia_update' materia.pk %}">Editar</a>
+
+                    <td>{{ materia.maestro_responsable }}</td>
+
+                    <td>
+
                         {% if materia.activa %}
-                        <form method="post" action="{% url 'materia_deactivate' materia.pk %}">
-                            {% csrf_token %}
-                            <button class="btn btn-small btn-danger" type="submit">Desactivar</button>
-                        </form>
+
+                            <span class="badge bg-success">
+                                Activa
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-danger">
+                                Inactiva
+                            </span>
+
                         {% endif %}
+
                     </td>
+
+                    <td>
+
+                        <a href="{% url 'materia_update' materia.id %}"
+                           class="btn btn-warning btn-sm">
+
+                            <i class="bi bi-pencil-square"></i>
+
+                        </a>
+
+                        {% if materia.activa %}
+
+                        <form
+                            method="post"
+                            action="{% url 'materia_deactivate' materia.id %}"
+                            style="display:inline;">
+
+                            {% csrf_token %}
+
+                            <button
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('¿Desea desactivar esta materia?')">
+
+                                <i class="bi bi-trash"></i>
+
+                            </button>
+
+                        </form>
+
+                        {% endif %}
+
+                    </td>
+
                 </tr>
-                {% empty %}
-                <tr><td colspan="9" class="empty">No se encontraron materias.</td></tr>
-                {% endfor %}
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="8" class="text-center">
+
+                        No existen materias registradas.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
             </tbody>
+
         </table>
+
     </div>
-</section>
+
+</div>
+
 {% endblock %}

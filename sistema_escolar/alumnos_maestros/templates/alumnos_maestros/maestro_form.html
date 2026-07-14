@@ -1,24 +1,85 @@
-{% extends 'alumnos_maestros/base.html' %}
+{% extends 'base.html' %}
 
-{% block title %}SCRUB - {{ titulo }}{% endblock %}
-{% block page_title %}{{ titulo }}{% endblock %}
+{% block title %}
+Maestros
+{% endblock %}
+
+{% block page_title %}
+{{ titulo }}
+{% endblock %}
 
 {% block content %}
-<section class="panel form-panel">
-    {% include 'alumnos_maestros/form_errors.html' %}
-    <form method="post" class="data-form">
-        {% csrf_token %}
-        {% for field in form %}
-            <div class="form-group {% if field.field.widget.input_type == 'checkbox' %}checkbox-row{% endif %}">
-                {{ field.label_tag }}
-                {{ field }}
-                {% for error in field.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+
+<div class="card shadow">
+
+    <div class="card-header bg-success text-white">
+
+        <h4 class="mb-0">
+
+            <i class="bi bi-person-workspace"></i>
+
+            {{ titulo }}
+
+        </h4>
+
+    </div>
+
+    <div class="card-body">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            {% if form.errors %}
+
+                <div class="alert alert-danger">
+
+                    {{ form.errors }}
+
+                </div>
+
+            {% endif %}
+
+            <div class="row">
+
+                {% for field in form %}
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label fw-bold">
+
+                        {{ field.label }}
+
+                    </label>
+
+                    {{ field }}
+
+                </div>
+
+                {% endfor %}
+
             </div>
-        {% endfor %}
-        <div class="form-actions">
-            <button class="btn btn-primary" type="submit">Guardar</button>
-            <a class="btn" href="{% url 'maestro_list' %}">Cancelar</a>
-        </div>
-    </form>
-</section>
+
+            <hr>
+
+            <button class="btn btn-success">
+
+                <i class="bi bi-check-circle-fill"></i>
+
+                Guardar
+
+            </button>
+
+            <a href="{% url 'maestro_list' %}" class="btn btn-secondary">
+
+                Cancelar
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
 {% endblock %}

@@ -1,75 +1,248 @@
-{% extends 'alumnos_maestros/base.html' %}
+{% extends 'base.html' %}
 
-{% block title %}SCRUB - Dashboard{% endblock %}
-{% block page_title %}Dashboard{% endblock %}
+{% block title %}
+Dashboard Académico
+{% endblock %}
+
+{% block page_title %}
+Dashboard Académico
+{% endblock %}
 
 {% block content %}
-<section class="dashboard-grid">
-    <article class="stat-card">
-        <span>Alumnos</span>
-        <strong>{{ total_alumnos }}</strong>
-        <small>activos</small>
-    </article>
-    <article class="stat-card">
-        <span>Maestros</span>
-        <strong>{{ total_maestros }}</strong>
-        <small>activos</small>
-    </article>
-    <article class="stat-card">
-        <span>Materias</span>
-        <strong>{{ total_materias }}</strong>
-        <small>activas</small>
-    </article>
-    <article class="stat-card">
-        <span>Inscripciones</span>
-        <strong>{{ total_inscripciones }}</strong>
-        <small>activas</small>
-    </article>
-</section>
 
-<section class="content-grid">
-    <div class="panel">
-        <div class="panel-header">
-            <h2>Alumnos recientes</h2>
-            <a class="btn btn-small" href="{% url 'alumno_list' %}">Ver todos</a>
+<div class="row mb-4">
+
+    <div class="col-md-3">
+
+        <div class="card text-center p-3">
+
+            <h5>👨‍🎓 Alumnos</h5>
+
+            <h1>{{ total_alumnos }}</h1>
+
         </div>
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Matricula</th>
-                        <th>Nombre</th>
-                        <th>Carrera</th>
-                        <th>Grupo</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card text-center p-3">
+
+            <h5>👨‍🏫 Maestros</h5>
+
+            <h1>{{ total_maestros }}</h1>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card text-center p-3">
+
+            <h5>📚 Materias</h5>
+
+            <h1>{{ total_materias }}</h1>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card text-center p-3">
+
+            <h5>📝 Inscripciones</h5>
+
+            <h1>{{ total_inscripciones }}</h1>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-lg-8">
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h5>
+
+                    Últimos alumnos registrados
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <table class="table table-hover">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Matrícula</th>
+
+                            <th>Nombre</th>
+
+                            <th>Carrera</th>
+
+                            <th>Semestre</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
                     {% for alumno in alumnos_recientes %}
-                    <tr>
-                        <td>{{ alumno.matricula }}</td>
-                        <td>{{ alumno.nombre }} {{ alumno.apellido_paterno }}</td>
-                        <td>{{ alumno.carrera }}</td>
-                        <td>{{ alumno.semestre }}-{{ alumno.grupo }}</td>
-                        <td><span class="badge badge-ok">{{ alumno.estatus_academico }}</span></td>
-                    </tr>
+
+                        <tr>
+
+                            <td>{{ alumno.matricula }}</td>
+
+                            <td>
+
+                                {{ alumno.nombre }}
+                                {{ alumno.apellido_paterno }}
+
+                            </td>
+
+                            <td>{{ alumno.carrera }}</td>
+
+                            <td>{{ alumno.semestre }}</td>
+
+                        </tr>
+
                     {% empty %}
-                    <tr><td colspan="5" class="empty">Aun no hay alumnos registrados.</td></tr>
+
+                        <tr>
+
+                            <td colspan="4">
+
+                                No hay alumnos registrados.
+
+                            </td>
+
+                        </tr>
+
                     {% endfor %}
-                </tbody>
-            </table>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </div>
+
     </div>
 
-    <div class="panel quick-panel">
-        <h2>Accesos rapidos</h2>
-        <div class="quick-actions">
-            <a href="{% url 'alumno_create' %}">Nuevo alumno</a>
-            <a href="{% url 'maestro_create' %}">Nuevo maestro</a>
-            <a href="{% url 'materia_create' %}">Nueva materia</a>
-            <a href="{% url 'inscripcion_create' %}">Nueva inscripcion</a>
-            <a href="/admin/">Admin Django</a>
+    <div class="col-lg-4">
+
+        <div class="card mb-3">
+
+            <div class="card-header">
+
+                Accesos rápidos
+
+            </div>
+
+            <div class="card-body d-grid gap-2">
+
+                <a href="{% url 'alumno_create' %}" class="btn btn-primary">
+
+                    <i class="bi bi-person-plus-fill"></i>
+
+                    Nuevo Alumno
+
+                </a>
+
+                <a href="{% url 'maestro_create' %}" class="btn btn-success">
+
+                    <i class="bi bi-person-workspace"></i>
+
+                    Nuevo Maestro
+
+                </a>
+
+                <a href="{% url 'materia_create' %}" class="btn btn-warning">
+
+                    <i class="bi bi-book-fill"></i>
+
+                    Nueva Materia
+
+                </a>
+
+                <a href="{% url 'inscripcion_create' %}" class="btn btn-info">
+
+                    <i class="bi bi-pencil-square"></i>
+
+                    Nueva Inscripción
+
+                </a>
+
+            </div>
+
         </div>
+
+        <div class="card">
+
+            <div class="card-header">
+
+                Últimos maestros
+
+            </div>
+
+            <div class="card-body">
+
+                <ul class="list-group">
+
+                    {% for maestro in maestros_recientes %}
+
+                        <li class="list-group-item">
+
+                            <strong>
+
+                                {{ maestro.nombre }}
+
+                                {{ maestro.apellido_paterno }}
+
+                            </strong>
+
+                            <br>
+
+                            <small>
+
+                                {{ maestro.especialidad }}
+
+                            </small>
+
+                        </li>
+
+                    {% empty %}
+
+                        <li class="list-group-item">
+
+                            No hay maestros registrados.
+
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+        </div>
+
     </div>
-</section>
+
+</div>
+
 {% endblock %}

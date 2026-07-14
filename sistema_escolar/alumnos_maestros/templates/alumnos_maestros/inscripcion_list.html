@@ -1,51 +1,166 @@
-{% extends 'alumnos_maestros/base.html' %}
+{% extends 'base.html' %}
 
-{% block title %}SCRUB - Inscripciones{% endblock %}
-{% block page_title %}Inscripciones{% endblock %}
+{% block title %}
+Inscripciones
+{% endblock %}
+
+{% block page_title %}
+Administración de Inscripciones
+{% endblock %}
 
 {% block content %}
-<section class="panel">
-    <div class="list-toolbar">
-        <form method="get" class="search-form">
-            <input type="search" name="q" value="{{ q }}" placeholder="Buscar por alumno, materia o periodo">
-            <button class="btn" type="submit">Buscar</button>
-        </form>
-        <a class="btn btn-primary" href="{% url 'inscripcion_create' %}">Nueva inscripcion</a>
-    </div>
-    <div class="table-wrap">
-        <table>
-            <thead>
+
+<div class="card">
+
+    <div class="card-body">
+
+        <div class="row mb-4">
+
+            <div class="col-md-8">
+
+                <form method="get">
+
+                    <div class="input-group">
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="q"
+                            value="{{ q }}"
+                            placeholder="Buscar inscripción...">
+
+                        <button class="btn btn-primary">
+
+                            <i class="bi bi-search"></i>
+
+                            Buscar
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="col-md-4 text-end">
+
+                <a href="{% url 'inscripcion_create' %}" class="btn btn-success">
+
+                    <i class="bi bi-plus-circle-fill"></i>
+
+                    Nueva Inscripción
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <table class="table table-hover table-striped align-middle">
+
+            <thead class="table-primary">
+
                 <tr>
+
                     <th>Alumno</th>
+
                     <th>Materia</th>
+
                     <th>Periodo</th>
+
                     <th>Fecha</th>
-                    <th>Activo</th>
-                    <th>Acciones</th>
+
+                    <th>Estado</th>
+
+                    <th width="170">Acciones</th>
+
                 </tr>
+
             </thead>
+
             <tbody>
-                {% for inscripcion in inscripciones %}
+
+            {% for inscripcion in inscripciones %}
+
                 <tr>
-                    <td>{{ inscripcion.alumno.matricula }} - {{ inscripcion.alumno.nombre }} {{ inscripcion.alumno.apellido_paterno }}</td>
-                    <td>{{ inscripcion.materia.clave }} - {{ inscripcion.materia.nombre }}</td>
+
+                    <td>{{ inscripcion.alumno }}</td>
+
+                    <td>{{ inscripcion.materia }}</td>
+
                     <td>{{ inscripcion.periodo_escolar }}</td>
-                    <td>{{ inscripcion.fecha_inscripcion|date:"d/m/Y H:i" }}</td>
-                    <td><span class="badge {% if inscripcion.activo %}badge-ok{% else %}badge-muted{% endif %}">{% if inscripcion.activo %}Si{% else %}No{% endif %}</span></td>
-                    <td class="actions">
+
+                    <td>{{ inscripcion.fecha_inscripcion|date:"d/m/Y" }}</td>
+
+                    <td>
+
                         {% if inscripcion.activo %}
-                        <form method="post" action="{% url 'inscripcion_deactivate' inscripcion.pk %}">
-                            {% csrf_token %}
-                            <button class="btn btn-small btn-danger" type="submit">Desactivar</button>
-                        </form>
+
+                            <span class="badge bg-success">
+
+                                Activa
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-danger">
+
+                                Inactiva
+
+                            </span>
+
                         {% endif %}
+
                     </td>
+
+                    <td>
+
+                        {% if inscripcion.activo %}
+
+                        <form method="post"
+                              action="{% url 'inscripcion_deactivate' inscripcion.id %}"
+                              style="display:inline;">
+
+                            {% csrf_token %}
+
+                            <button
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('¿Desea cancelar esta inscripción?')">
+
+                                <i class="bi bi-trash"></i>
+
+                            </button>
+
+                        </form>
+
+                        {% endif %}
+
+                    </td>
+
                 </tr>
-                {% empty %}
-                <tr><td colspan="6" class="empty">No se encontraron inscripciones.</td></tr>
-                {% endfor %}
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="6" class="text-center">
+
+                        No existen inscripciones registradas.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
             </tbody>
+
         </table>
+
     </div>
-</section>
+
+</div>
+
 {% endblock %}

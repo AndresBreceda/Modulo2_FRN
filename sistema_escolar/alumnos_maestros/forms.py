@@ -4,14 +4,39 @@ from .models import Alumno, Inscripcion, Maestro, Materia
 
 
 class StyledModelForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
+
         super().__init__(*args, **kwargs)
-        for field in self.fields.values():
+
+        for nombre, field in self.fields.items():
+
             widget = field.widget
+
             if isinstance(widget, forms.CheckboxInput):
-                widget.attrs.update({'class': 'form-check'})
+
+                widget.attrs.update({
+                    "class": "form-check-input"
+                })
+
+            elif isinstance(widget, forms.Select):
+
+                widget.attrs.update({
+                    "class": "form-select"
+                })
+
+            elif isinstance(widget, forms.Textarea):
+
+                widget.attrs.update({
+                    "class": "form-control",
+                    "rows": 4,
+                })
+
             else:
-                widget.attrs.update({'class': 'form-control'})
+
+                widget.attrs.update({
+                    "class": "form-control"
+                })
 
 
 class AlumnoForm(StyledModelForm):
