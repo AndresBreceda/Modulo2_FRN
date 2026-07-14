@@ -33,6 +33,7 @@
             color: #00ff9d;
             font-size: 20px;
             font-weight: bold;
+            text-decoration: none;
         }
 
         .logo span {
@@ -351,17 +352,20 @@
 <body>
 
     <div class="navbar">
-        <div class="logo">⌁ Crypto<span>Vault</span></div>
+        <a class="logo" href="{% url 'home' %}">⌁ Crypto<span>Vault</span></a>
 
         <div class="nav-links">
-            <a href="{% url 'dashboard' %}">Shield & View</a>
-            <a href="{% url 'documentos' %}">History</a>
-            <a href="{% url 'firma' %}">Explorer</a>
-            <a href="{% url 'usuario' %}">Usuario</a>
+            <a href="{% url 'firmar_documentos_dashboard' %}">Shield & View</a>
+            <a href="{% url 'firmar_documentos_documentos' %}">History</a>
+            <a href="{% url 'firmar_documentos_firma' %}">Explorer</a>
+            <a href="{% url 'firmar_documentos_usuario' %}">Usuario</a>
         </div>
 
         <div class="logout">
-            <a href="{% url 'logout' %}">Cerrar sesión</a>
+            <form action="{% url 'logout' %}" method="post" style="margin:0;">
+                {% csrf_token %}
+                <button type="submit" style="background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;padding:0;">Cerrar sesión</button>
+            </form>
         </div>
     </div>
 

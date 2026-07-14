@@ -34,6 +34,16 @@ def home(request):
             'descripcion': 'Administración de libros, ejemplares, solicitudes y préstamos.',
             'url': 'lista_libros',
         },
+        {
+            'nombre': 'Firma de Documentos',
+            'descripcion': 'Firma digital de documentos con cadena de bloques verificable.',
+            'url': 'firmar_documentos_dashboard',
+        },
+        {
+            'nombre': 'Alumnos y Maestros 2',
+            'descripcion': 'Segunda versión del registro de alumnos y maestros, por César y Ariel.',
+            'url': 'altasybajasarielycesar_index',
+        },
     ]
 
     return render(request, 'home.html', {'modulos': modulos})

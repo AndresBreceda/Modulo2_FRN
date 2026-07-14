@@ -1,4 +1,4 @@
-{% extends 'core/base.html' %}
+{% extends 'firmar_documentos/base.html' %}
 
 {% block contenido %}
 
@@ -31,7 +31,10 @@
 
     <br>
 
-    <a href="{% url 'logout' %}" class="btn">Cerrar sesión</a>
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn">Cerrar sesión</button>
+    </form>
 </div>
 
 {% endblock %}

@@ -34,6 +34,9 @@ INSTALLED_APPS = [
     'usuarios',
     'libros',
     'prestamos',
+
+    'firmar_documentos',
+    'altasybajasarielycesar',
 ]
 
 MIDDLEWARE = [

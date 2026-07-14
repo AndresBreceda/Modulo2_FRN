@@ -1,58 +1,53 @@
-{% extends 'core/base.html' %}
+{% extends 'firmar_documentos/base.html' %}
 
 {% block contenido %}
 
 <div style="display: flex; justify-content: space-between; align-items: center;">
     <div>
         <h1 class="page-title">▤ Ledger Explorer</h1>
-        <p style="color:#888;">Total Height: <span class="green">2</span></p>
+        <p style="color:#888;">Total Height: <span class="green">{{ firmas|length }}</span></p>
     </div>
 
-    <a href="{% url 'dashboard' %}" class="btn btn-outline">⟳ Sync Chain</a>
+    <a href="{% url 'firmar_documentos_dashboard' %}" class="btn btn-outline">⟳ Sync Chain</a>
 </div>
 
 <div class="line"></div>
 
 <div class="explorer-chain">
-
     <div class="block-card">
         <div class="block-header">
             <strong>BLOCK #0</strong>
-            <span>22/6/2026, 18:48:49</span>
         </div>
 
         <div class="field-name"># Hash</div>
-        <div class="hash-box">a0d9bedf08fc...511adbc73434</div>
+        <div class="hash-box">0</div>
 
         <div class="field-name">↗ Previous Hash</div>
-        <div class="hash-box">0</div>
+        <div class="hash-box">—</div>
 
         <div class="field-name">▤ Payload</div>
         <div class="payload">Bloque Génesis</div>
     </div>
 
+    {% for f in firmas %}
     <div class="chain-line"></div>
 
     <div class="block-card">
         <div class="block-header">
-            <strong>BLOCK #1</strong>
-            <span>22/6/2026, 18:49:28</span>
+            <strong>BLOCK #{{ forloop.counter }}</strong>
+            <span>{{ f.fecha_firma }}</span>
         </div>
 
         <div class="field-name"># Hash</div>
-        <div class="hash-box">7ef771ac3a0...312dac01290e</div>
+        <div class="hash-box">{{ f.hash_bloque|slice:":12" }}...{{ f.hash_bloque|slice:"-12:" }}</div>
 
         <div class="field-name">↗ Previous Hash</div>
-        <div class="hash-box">a0d9bedf08fc...511adbc73434</div>
+        <div class="hash-box">{% if f.hash_anterior == '0' %}0{% else %}{{ f.hash_anterior|slice:":12" }}...{{ f.hash_anterior|slice:"-12:" }}{% endif %}</div>
 
         <div class="field-name">▤ Payload</div>
-        <div class="payload">
-            Type: documento_firmado<br>
-            Title: Non-Disclosure<br>
-            DocHash: 75f76dbe...c6218933
-        </div>
+        <div class="payload">{{ f.payload }}</div>
     </div>
-
+    {% endfor %}
 </div>
 
 {% endblock %}

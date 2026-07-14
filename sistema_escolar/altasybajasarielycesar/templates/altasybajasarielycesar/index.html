@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escuela - Gestión de Altas y Bajas</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Variables de Tema --- */
+        :root {
+            --primary-color: #4f46e5;      /* Indigo moderno */
+            --primary-hover: #4338ca;
+            --danger-color: #ef4444;       /* Rojo suave */
+            --danger-hover: #dc2626;
+            --bg-color: #f1f5f9;           /* Gris azulado muy claro */
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success-bg: #dcfce7;
+            --success-text: #166534;
+        }
+
+        /* --- Estilos Globales --- */
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        h1 {
+            color: var(--text-main);
+            text-align: center;
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            letter-spacing: -0.025em;
+        }
+
+        h2 {
+            color: var(--text-main);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- Mensajes de Éxito --- */
+        .mensajes {
+            list-style: none;
+            padding: 0;
+            margin: 0 auto 30px auto;
+            max-width: 600px;
+        }
+
+        .mensajes li {
+            background-color: var(--success-bg);
+            color: var(--success-text);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            border: 1px solid #bbf7d0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        /* --- Layout de Columnas --- */
+        .columnas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        /* --- Formularios (Tarjetas) --- */
+        form.alta {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        input[type="text"], 
+        input[type="email"], 
+        input[type="number"], 
+        select {
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            background-color: #f8fafc;
+        }
+
+        input:focus, 
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background-color: var(--card-bg);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+        .errores {
+            color: var(--danger-color);
+            font-size: 13px;
+            margin-top: -12px;
+            font-weight: 500;
+        }
+
+        /* --- Botones --- */
+        button {
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* --- Listas de Registros --- */
+        ul.registros {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        ul.registros li {
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        ul.registros li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .info strong {
+            color: var(--text-main);
+            font-size: 1rem;
+        }
+
+        .info .detalles {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .info small {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* --- Botón Baja --- */
+        .btn-baja {
+            background-color: transparent;
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            width: auto;
+            border-radius: 6px;
+        }
+
+        .btn-baja:hover {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .vacio {
+            color: var(--text-muted);
+            text-align: center;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px dashed var(--border-color);
+            font-size: 0.95rem;
+        }
+        
+        /* Ajuste para formularios dentro de la lista */
+        ul.registros form {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Gestión Académica</h1>
+
+    {% if messages %}
+        <ul class="mensajes">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="columnas">
+        <div class="columna">
+            <h2>
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                Maestros
+            </h2>
+
+            <form class="alta" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="maestro">
+                
+                {{ maestro_form.matricula }}
+                {% if maestro_form.matricula.errors %}<div class="errores">{{ maestro_form.matricula.errors }}</div>{% endif %}
+
+                {{ maestro_form.nombre }}
+                {% if maestro_form.nombre.errors %}<div class="errores">{{ maestro_form.nombre.errors }}</div>{% endif %}
+                
+                {{ maestro_form.materia }}
+                {% if maestro_form.materia.errors %}<div class="errores">{{ maestro_form.materia.errors }}</div>{% endif %}
+                
+                {{ maestro_form.email }}
+                {% if maestro_form.email.errors %}<div class="errores">{{ maestro_form.email.errors }}</div>{% endif %}
+                
+                <button type="submit">Dar de alta maestro</button>
+            </form>
+
+            {% if maestros %}
+                <ul class="registros">
+                    {% for maestro in maestros %}
+                        <li>
+                            <div class="info">
+                                <strong>{{ maestro.nombre }}</strong>
+                                <span class="detalles">Matrícula: {{ maestro.matricula }} • {{ maestro.materia }}</span>
+                                <small>
+                                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                    {{ maestro.email|default:"Sin correo registrado" }}
+                                </small>
+                            </div>
+                            <form method="post" action="{% url 'altasybajasarielycesar_eliminar_maestro' maestro.pk %}" onsubmit="return confirm('¿Estás seguro de que deseas dar de baja al maestro {{ maestro.nombre }}?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-baja">Baja</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="vacio">No hay maestros registrados en el sistema.</p>
+            {% endif %}
+        </div>
+
+        <div class="columna">
+            <h2>
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path></svg>
+                Alumnos
+            </h2>
+
+            <form class="alta" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="alumno">
+                
+                {{ alumno_form.matricula }}
+                {% if alumno_form.matricula.errors %}<div class="errores">{{ alumno_form.matricula.errors }}</div>{% endif %}
+
+                {{ alumno_form.nombre }}
+                {% if alumno_form.nombre.errors %}<div class="errores">{{ alumno_form.nombre.errors }}</div>{% endif %}
+                
+                {{ alumno_form.grado }}
+                {% if alumno_form.grado.errors %}<div class="errores">{{ alumno_form.grado.errors }}</div>{% endif %}
+                
+                {{ alumno_form.email }}
+                {% if alumno_form.email.errors %}<div class="errores">{{ alumno_form.email.errors }}</div>{% endif %}
+                
+                <button type="submit">Dar de alta alumno</button>
+            </form>
+
+            {% if alumnos %}
+                <ul class="registros">
+                    {% for alumno in alumnos %}
+                        <li>
+                            <div class="info">
+                                <strong>{{ alumno.nombre }}</strong>
+                                <span class="detalles">Matrícula: {{ alumno.matricula }} • {{ alumno.grado }}</span>
+                                <small>
+                                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                    {{ alumno.email|default:"Sin correo registrado" }}
+                                </small>
+                            </div>
+                            <form method="post" action="{% url 'altasybajasarielycesar_eliminar_alumno' alumno.pk %}" onsubmit="return confirm('¿Estás seguro de que deseas dar de baja al alumno {{ alumno.nombre }}?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-baja">Baja</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="vacio">No hay alumnos registrados en el sistema.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

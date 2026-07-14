@@ -1,4 +1,4 @@
-{% extends 'core/base.html' %}
+{% extends 'firmar_documentos/base.html' %}
 
 {% block contenido %}
 
@@ -11,41 +11,32 @@
             <th>Title</th>
             <th>Date</th>
             <th>Doc Hash</th>
-            <th>Block</th>
+            <th>Estado</th>
             <th>Actions</th>
         </tr>
     </thead>
 
     <tbody>
+        {% for doc in documentos %}
         <tr>
-            <td><strong>#1</strong></td>
-            <td><strong>Non-Disclosure</strong></td>
-            <td>Jun 22, 2026 18:49</td>
+            <td><strong>#{{ doc.id }}</strong></td>
+            <td><strong>{{ doc.titulo }}</strong></td>
+            <td>{{ doc.fecha_creacion }}</td>
             <td>
-                <span class="tag"># 75f76dbe...c6218933</span>
+                <span class="tag"># {{ doc.hash_documento|slice:":10" }}...{{ doc.hash_documento|slice:"-10:" }}</span>
             </td>
             <td>
-                <span class="tag">BLK-1</span>
+                <span class="tag">{{ doc.get_estado_display }}</span>
             </td>
             <td>
-                <a href="{% url 'firma' %}" class="green">View ↗</a>
+                <a href="{% url 'firmar_documentos_firma' %}" class="green">View ↗</a>
             </td>
         </tr>
-
+        {% empty %}
         <tr>
-            <td><strong>#2</strong></td>
-            <td><strong>Contrato de Servicio</strong></td>
-            <td>Jun 29, 2026 10:30</td>
-            <td>
-                <span class="tag"># a98f73cd...9acd1234</span>
-            </td>
-            <td>
-                <span class="tag">BLK-2</span>
-            </td>
-            <td>
-                <a href="{% url 'firma' %}" class="green">View ↗</a>
-            </td>
+            <td colspan="6" style="text-align:center; color:#888;">Aún no hay documentos firmados.</td>
         </tr>
+        {% endfor %}
     </tbody>
 </table>
 

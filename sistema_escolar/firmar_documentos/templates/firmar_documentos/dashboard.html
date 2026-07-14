@@ -1,4 +1,4 @@
-{% extends 'core/base.html' %}
+{% extends 'firmar_documentos/base.html' %}
 
 {% block contenido %}
 
@@ -7,7 +7,7 @@
         <div class="icon-box">▦</div>
         <div>
             <p>Total Blocks</p>
-            <h2>2</h2>
+            <h2>{{ total_bloques }}</h2>
         </div>
     </div>
 
@@ -15,7 +15,7 @@
         <div class="icon-box">▤</div>
         <div>
             <p>Documents Signed</p>
-            <h2>1</h2>
+            <h2>{{ documentos_firmados }}</h2>
         </div>
     </div>
 
@@ -38,7 +38,7 @@
             {% csrf_token %}
 
             <label>Document Title</label>
-            <input type="text" name="titulo" placeholder="e.g. Non-Disclosure Agreement">
+            <input type="text" name="titulo" placeholder="e.g. Non-Disclosure Agreement" required>
 
             <label>Content payload</label>
             <textarea name="contenido" rows="8" placeholder="Enter document text to be cryptographically signed..."></textarea>
@@ -50,47 +50,7 @@
     <div>
         <h2 class="section-title">⌁ Live Blockchain</h2>
 
-        <div class="blockchain-area">
-
-            <div class="block-card">
-                <div class="block-header">
-                    <strong>BLOCK #0</strong>
-                    <span>22/6/2026, 18:48:49</span>
-                </div>
-
-                <div class="field-name"># Hash</div>
-                <div class="hash-box">a0d9bedf08fc...511adbc73434</div>
-
-                <div class="field-name">↗ Previous Hash</div>
-                <div class="hash-box">0</div>
-
-                <div class="field-name">▤ Payload</div>
-                <div class="payload">Bloque Génesis</div>
-            </div>
-
-            <div class="arrow">→</div>
-
-            <div class="block-card">
-                <div class="block-header">
-                    <strong>BLOCK #1</strong>
-                    <span>22/6/2026, 18:49:28</span>
-                </div>
-
-                <div class="field-name"># Hash</div>
-                <div class="hash-box">7ef771ac3a0...312dac01290e</div>
-
-                <div class="field-name">↗ Previous Hash</div>
-                <div class="hash-box">a0d9bedf08fc...511adbc73434</div>
-
-                <div class="field-name">▤ Payload</div>
-                <div class="payload">
-                    Type: documento_firmado<br>
-                    Title: Non-Disclosure<br>
-                    DocHash: 75f76dbe...c6218933
-                </div>
-            </div>
-
-        </div>
+        <a href="{% url 'firmar_documentos_firma' %}" class="btn btn-outline">Ver cadena completa ↗</a>
     </div>
 
 </div>
